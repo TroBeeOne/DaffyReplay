@@ -1,0 +1,59 @@
+DaffyReplay
+Third-party notices
+
+DaffyReplay is distributed as a .NET tool package, which bundles the binaries of
+its dependencies. Those binaries are redistributed under the licenses below. The
+full text of each license is reproduced here where the license requires it, and
+by reference where it does not.
+
+DaffyReplay itself is Copyright (c) 2026 Scott Traube and TroBeeOne LLC and is
+licensed under the MIT License; see LICENSE.txt. The components below are licensed to you under
+their own terms, not under DaffyReplay's license.
+
+--------------------------------------------------------------------------------
+System.Security.Cryptography.ProtectedData
+https://github.com/dotnet/runtime
+Copyright (c) .NET Foundation and Contributors
+MIT License
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+--------------------------------------------------------------------------------
+The HTML report
+
+report.html is written by DaffyReplay's own code: its styles, script and charts
+are part of DaffyReplay, and it loads nothing - no script, font, style sheet or
+image - from anywhere else. It uses only the .NET runtime itself, which is MIT
+licensed and not redistributed by this package.
+
+--------------------------------------------------------------------------------
+Used in development only, never distributed
+
+DaffyReplay's tests and test workloads use Microsoft.Data.SqlClient, Entity
+Framework Core, System.Data.Odbc and the Microsoft JDBC Driver for SQL Server
+(all MIT), and xUnit (Apache License 2.0). None of them is in the package.
+
+--------------------------------------------------------------------------------
+Protocol
+
+DaffyReplay implements the Tabular Data Stream protocol as published by
+Microsoft in the open [MS-TDS] specification. It contains no Microsoft code, and
+is not a derivative of, replacement for, or emulator of Microsoft SQL Server. It
+is not affiliated with, endorsed by, or sponsored by Microsoft Corporation.
+Microsoft, SQL Server, Azure and Entra are trademarks of Microsoft Corporation.
+Java is a trademark of Oracle and/or its affiliates.

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DaffyReplay/DaffyReplay.csproj" />
+  </Folder>
+  <Folder Name="/probes/">
+    <Project Path="probes/ReplayProbe/ReplayProbe.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DaffyReplay.Tests/DaffyReplay.Tests.csproj" />
+  </Folder>
+</Solution>

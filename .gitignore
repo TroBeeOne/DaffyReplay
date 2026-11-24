@@ -1,0 +1,33 @@
+# Local reference material and notes, kept out of this repository on purpose.
+CONTEXT/
+contextinfo/
+
+bin/
+obj/
+.vs/
+.vscode/
+.idea/
+*.user
+TestResults/
+
+# Packages are built and published from a local folder, never committed.
+nupkg/
+*.nupkg
+*.snupkg
+
+# Local settings, keys and archives.
+.env
+.claude/
+*.pfx
+*.p12
+*.snk
+*.pem
+*.key
+*.zip
+*.log
+
+# What a local "daffyreplay run" writes into the directory it was started from, and scratch recordings.
+replay-*/
+work/
+samples/*.ndjson
+!samples/workload.ndjson

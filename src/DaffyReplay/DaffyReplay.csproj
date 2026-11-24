@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>DaffyReplay</RootNamespace>
+    <AssemblyName>daffyreplay</AssemblyName>
+  </PropertyGroup>
+
+  <!-- As DaffyTee: no native library to carry, so one RID-agnostic tool package serves every platform. -->
+  <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>daffyreplay</ToolCommandName>
+    <PackageId>DaffyReplay</PackageId>
+    <Version>0.2.1</Version>
+    <Authors>TroBeeOne LLC</Authors>
+    <Company>TroBeeOne LLC</Company>
+    <Copyright>Copyright (c) 2026 Scott Traube and TroBeeOne LLC</Copyright>
+    <Title>DaffyReplay</Title>
+    <Description>Replays a DaffyTee recording of real SQL Server traffic against a test or pre-production SQL Server - as fast as possible, one request at a time, or with the recorded timings - and reports what failed that did not fail before, and how the timings compare. Requests are replayed byte for byte from the wire-level recording, over DaffyReplay's own TDS client: exact parameter types, table-valued parameters, transactions, prepared statements and pooled-connection resets, with no server-side trace or Extended Events. Early release.</Description>
+    <PackageTags>sql-server;azure-sql;replay;workload;load-testing;performance;regression;upgrade;migration;tds;daffytee;sqlsim;sqlsimtools;dotnet-tool</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://trobee.one</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/TroBeeOne/DaffyReplay</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <!-- Release builds record source paths as /_/... rather than this machine's folders (in the .pdb the package carries). -->
+    <ContinuousIntegrationBuild Condition="'$(Configuration)' == 'Release'">true</ContinuousIntegrationBuild>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReleaseNotes>0.2.1: DaffyReplay is now licensed under the MIT License; 0.2.0 and earlier were published under the Business Source License 1.1. No changes to the tool itself. Binaries signed by TroBeeONE LLC.
+0.2.0: To and from sqlsim (Microsoft sqlsimtools). export sqlsim writes a DaffyTee recording as sqlsim's replay XML, for sqlsim and sqlsim Studio: every request as T-SQL, procedure calls with their declared types, transactions the application ran through its driver as BEGIN/COMMIT/ROLLBACK TRANSACTION, in files within sqlsim's limits. import sqlsim reads sqlsim's replay XML (an Extended Events capture) into a recording DaffyReplay runs: pooled connections and resets kept, and the report says first what an Extended Events capture cannot tell (transactions opened through the driver, errors raised while a statement ran, rows per statement); an imported batch is compared on its row total. Replay and comparison of DaffyTee recordings are unchanged. Binaries signed by TroBeeONE LLC.
+0.1.1: The binaries are now Authenticode-signed by TroBeeONE LLC. Decodes datetime values as DaffyTee 0.3.1 does, rounded to the millisecond as SQL Server shows them (.000, .003, .007), so --approximate writes them as literals SQL Server accepts. DaffyTee 0.3.0 and earlier decoded a datetime after 00:02:23 wrong unless the recording has raw bytes: inspect warns about procedure calls without raw bytes that hold such values, and run --approximate skips them rather than send the wrong time.
+0.1.0: First release. Replays DaffyTee (0.3.0 or later) recordings against a test SQL Server at recorded pace (with --speed), fast or serial; byte-exact from --raw recordings, with transaction descriptors patched and prepared-statement and cursor handles mapped; approximate T-SQL for procedure calls recorded without raw bytes. inspect, target, run, report and compare commands; report.json and a self-contained report.html. Tested with ADO.NET, EF Core, ODBC and JDBC workloads on SQL Server 2022 and 2025.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <!-- The package page gets NUGET.md rather than the repository README, as in DaffyTee. -->
+  <ItemGroup>
+    <None Include="..\..\NUGET.md" Pack="true" PackagePath="README.md" Condition="Exists('..\..\NUGET.md')" />
+    <None Include="..\..\THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="\" Condition="Exists('..\..\THIRD-PARTY-NOTICES.txt')" />
+    <None Include="..\..\LICENSE.txt" Pack="true" PackagePath="\" />
+    <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="DaffyReplay.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.0" />
+  </ItemGroup>
+
+</Project>

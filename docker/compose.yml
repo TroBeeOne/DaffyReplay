@@ -1,0 +1,71 @@
+# Test environment for DaffyReplay: a "production" SQL Server to record from (through DaffyTee),
+# and a separate test server to replay into.
+#
+#   docker compose -f docker/compose.yml up -d                     source + target (SQL Server 2022)
+#   docker compose -f docker/compose.yml --profile 2025 up -d      ...and a SQL Server 2025 target
+#
+# source  14361  plays production: DaffyTee sits in front of it while a workload is recorded
+# target  14362  the test server a recording is replayed into (2022, the same version)
+# target25 14363 the upgrade case: record on 2022, replay on 2025
+#
+# All three share one "backups" volume at /backups, so a backup taken on the source the moment
+# recording starts can be restored on a target before every replay - the workflow the docs ask of
+# real users. The containers run as root so all three can write to it; they are throwaway test
+# servers. Passwords are for these local containers only; override them in docker/.env.
+#
+# Ports are clear of DaffyTee's (14333) and DaffyDuo's (14341/14342) test servers.
+
+name: daffyreplay
+
+x-sql: &sql
+  restart: unless-stopped
+  user: root
+  environment:
+    ACCEPT_EULA: "Y"
+    MSSQL_PID: Developer
+    MSSQL_SA_PASSWORD: ${MSSQL_SA_PASSWORD:-DaffyReplay!Dev2026}
+    MSSQL_MEMORY_LIMIT_MB: "2048"
+  healthcheck:
+    test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -Q 'SELECT 1' -b -o /dev/null"]
+    interval: 5s
+    timeout: 5s
+    retries: 40
+    start_period: 10s
+
+services:
+  source:
+    <<: *sql
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "14361:1433"
+    volumes:
+      - source-data:/var/opt/mssql
+      - backups:/backups
+      - ./seed.sql:/seed/seed.sql:ro
+
+  target:
+    <<: *sql
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "14362:1433"
+    volumes:
+      - target-data:/var/opt/mssql
+      - backups:/backups
+      - ./seed.sql:/seed/seed.sql:ro
+
+  target25:
+    <<: *sql
+    image: mcr.microsoft.com/mssql/server:2025-latest
+    profiles: ["2025"]
+    ports:
+      - "14363:1433"
+    volumes:
+      - target25-data:/var/opt/mssql
+      - backups:/backups
+      - ./seed.sql:/seed/seed.sql:ro
+
+volumes:
+  source-data:
+  target-data:
+  target25-data:
+  backups:
